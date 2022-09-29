@@ -28,6 +28,8 @@ dependencies:
   #State Management
   mobx: ^2.0.7
   flutter_mobx: ^2.0.6+1
+  provider: ^6.0.3
+
 
   #Maps
   google_maps_flutter: ^2.1.5
@@ -44,7 +46,12 @@ dependencies:
   #http - dio
   dio: ^4.0.6
   shared_preferences: ^2.0.15
-  
+
+
+  #Usefull tools
+  get_it: ^7.2.0
+  flutter_dotenv: ^5.0.2
+
 
 dev_dependencies:
   flutter_test:
@@ -55,9 +62,19 @@ dev_dependencies:
 
 #
 flutter:
-
- 
   uses-material-design: true
+  assets:
+    - .env
+    - assets/
+
+
+#splash Config
+flutter_native_splash:
+  color: "#BE2BFA"
+  android_12:
+    icon_background_color: "BE2BFA"
+    
+
 
   # To add assets to your application, add an assets section, like this:
   # assets:
