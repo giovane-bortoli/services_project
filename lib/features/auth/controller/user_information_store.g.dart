@@ -41,6 +41,22 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
     });
   }
 
+  late final _$errorMessageAtom =
+      Atom(name: '_UserInformationStoreBase.errorMessage', context: context);
+
+  @override
+  String get errorMessage {
+    _$errorMessageAtom.reportRead();
+    return super.errorMessage;
+  }
+
+  @override
+  set errorMessage(String value) {
+    _$errorMessageAtom.reportWrite(value, super.errorMessage, () {
+      super.errorMessage = value;
+    });
+  }
+
   late final _$textEditingControllerAtom = Atom(
       name: '_UserInformationStoreBase.textEditingController',
       context: context);
@@ -79,13 +95,13 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
       name: '_UserInformationStoreBase.messageFirebaseError', context: context);
 
   @override
-  String get messageFirebaseError {
+  String? get messageFirebaseError {
     _$messageFirebaseErrorAtom.reportRead();
     return super.messageFirebaseError;
   }
 
   @override
-  set messageFirebaseError(String value) {
+  set messageFirebaseError(String? value) {
     _$messageFirebaseErrorAtom.reportWrite(value, super.messageFirebaseError,
         () {
       super.messageFirebaseError = value;
@@ -191,6 +207,7 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
     return '''
 email: ${email},
 password: ${password},
+errorMessage: ${errorMessage},
 textEditingController: ${textEditingController},
 errorFirebase: ${errorFirebase},
 messageFirebaseError: ${messageFirebaseError},

@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobx/mobx.dart';
 import 'package:services_project/features/auth/services/user/user_auth.dart';
@@ -24,6 +25,9 @@ abstract class _UserInformationStoreBase with Store {
   void setPassword(String value) => password = value;
 
   @observable
+  String errorMessage = '';
+
+  @observable
   TextEditingController textEditingController = TextEditingController();
 
   //Firebase Methods
@@ -33,7 +37,7 @@ abstract class _UserInformationStoreBase with Store {
   void setErrorFirebase(bool value) => errorFirebase = value;
 
   @observable
-  String messageFirebaseError = '';
+  String? messageFirebaseError = '';
   @action
   void setMessageFirebaseError(String value) => messageFirebaseError = value;
 
@@ -44,14 +48,14 @@ abstract class _UserInformationStoreBase with Store {
       setErrorFirebase(false);
       setMessageFirebaseError('');
       await clientAuth.signIn(email, password);
-    } on Exception catch (e) {
-      if (e == 'user-not-found') {
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
         setErrorFirebase(true);
         setMessageFirebaseError('Usuário não encontrado');
-      } else if (e == 'wrong-password') {
+      } else if (e.code == 'wrong-password') {
         setErrorFirebase(true);
         setMessageFirebaseError('Senha inválida!');
-      } else if (e == 'invalid-email') {
+      } else if (e.code == 'invalid-email') {
         setErrorFirebase(true);
         setMessageFirebaseError('Email inválido');
       } else {

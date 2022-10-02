@@ -1,18 +1,47 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:services_project/features/auth/controller/user_information_store.dart';
 import 'package:services_project/shared/Widgets/custom_text_form_field.dart';
 import 'package:services_project/shared/Widgets/snack_bar.dart';
 import 'package:services_project/shared/Widgets/status_bar_widget.dart';
+import 'package:services_project/shared/client/custom_errors/handle_error.dart';
 
 class LoginView extends StatefulWidget {
-  LoginView({Key? key}) : super(key: key);
+  const LoginView({Key? key}) : super(key: key);
 
   @override
   State<LoginView> createState() => _LoginViewState();
 }
 
+UserInformationStore userStore = UserInformationStore();
+
 class _LoginViewState extends State<LoginView> {
+  late final ReactionDisposer reactionErrorFirebase;
+  @override
+  void initState() {
+    flushBarErroFirebase();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    reactionErrorFirebase();
+    super.dispose();
+  }
+
+  void flushBarErroFirebase() {
+    reactionErrorFirebase = reaction((_) => userStore.errorFirebase, (_) {
+      userStore.errorFirebase
+          ? CustomSnackBar.errorSnackBar(context,
+              message: userStore.messageFirebaseError ?? '')
+          : null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,17 +51,19 @@ class _LoginViewState extends State<LoginView> {
 
   Widget content(context) {
     return IntrinsicHeight(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const StatusBarWidget(),
-          loginField(),
-          passWordField(),
-          loginButton(),
-        ],
-      ),
+      child: Observer(builder: (context) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const StatusBarWidget(),
+            loginField(),
+            passWordField(),
+            loginButton(),
+          ],
+        );
+      }),
     );
   }
 
@@ -69,10 +100,11 @@ class _LoginViewState extends State<LoginView> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
             userStore.validateFields();
             if (!userStore.hasErrorEmail == false) {
-              CustomSnackBar.errorSnackBar(context, message: 'Erro ao logar!');
+              CustomSnackBar.errorSnackBar(context,
+                  message: 'E-mail ou senha inválidos!');
             } else {
               try {
                 userStore
@@ -84,7 +116,7 @@ class _LoginViewState extends State<LoginView> {
                       : null;
                 });
               } catch (e) {
-                userStore.messageFirebaseError = e.toString();
+                userStore.errorMessage.toString();
               }
             }
           },
