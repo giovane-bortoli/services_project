@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobx/mobx.dart';
 import 'package:services_project/features/auth/services/user/user_auth.dart';
+import 'package:services_project/shared/client/custom_errors/custom_errors.dart';
 import 'package:services_project/shared/utils/field_validator.dart';
 part 'user_information_store.g.dart';
 
@@ -41,27 +42,33 @@ abstract class _UserInformationStoreBase with Store {
   @action
   void setMessageFirebaseError(String value) => messageFirebaseError = value;
 
+  @observable
+  bool passwordVisible = false;
+  @action
+  void setPasswordVisible(bool value) => passwordVisible = value;
+
   @action
   Future<void> loginUser(
       {required String email, required String password}) async {
     try {
-      setErrorFirebase(false);
-      setMessageFirebaseError('');
+      // setErrorFirebase(false);
+      // setMessageFirebaseError('');
       await clientAuth.signIn(email, password);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        setErrorFirebase(true);
-        setMessageFirebaseError('Usuário não encontrado');
-      } else if (e.code == 'wrong-password') {
-        setErrorFirebase(true);
-        setMessageFirebaseError('Senha inválida!');
-      } else if (e.code == 'invalid-email') {
-        setErrorFirebase(true);
-        setMessageFirebaseError('Email inválido');
-      } else {
-        setErrorFirebase(true);
-        setMessageFirebaseError('Ocorreu um erro, tente novamente!');
-      }
+    } catch (e) {
+      throw AuthenticationException();
+      // if (e.code == 'user-not-found') {
+      //   setErrorFirebase(true);
+      //   setMessageFirebaseError('Usuário não encontrado');
+      // } else if (e.code == 'wrong-password') {
+      //   setErrorFirebase(true);
+      //   setMessageFirebaseError('Senha inválida!');
+      // } else if (e.code == 'invalid-email') {
+      //   setErrorFirebase(true);
+      //   setMessageFirebaseError('Email inválido');
+      // } else {
+      //   setErrorFirebase(true);
+      //   setMessageFirebaseError('Ocorreu um erro, tente novamente!');
+      // }
     }
   }
 

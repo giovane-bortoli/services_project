@@ -24,5 +24,5 @@ Future<void> setupLibraries() async {
   AppDependencies().setup();
 
   //variavéis de ambiente
-  // await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: ".env");
 }

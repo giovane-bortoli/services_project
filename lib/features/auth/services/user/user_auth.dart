@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:services_project/main.dart';
+import 'package:services_project/shared/client/custom_errors/handle_error.dart';
 
 class UserAuth {
   final auth = getIt<FirebaseAuth>();
@@ -12,7 +14,7 @@ class UserAuth {
           email: email, password: password);
       inspect(result);
     } on FirebaseAuthException catch (e) {
-      throw e.code;
+      throw e;
     }
   }
 }

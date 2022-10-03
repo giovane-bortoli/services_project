@@ -108,6 +108,22 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
     });
   }
 
+  late final _$passwordVisibleAtom =
+      Atom(name: '_UserInformationStoreBase.passwordVisible', context: context);
+
+  @override
+  bool get passwordVisible {
+    _$passwordVisibleAtom.reportRead();
+    return super.passwordVisible;
+  }
+
+  @override
+  set passwordVisible(bool value) {
+    _$passwordVisibleAtom.reportWrite(value, super.passwordVisible, () {
+      super.passwordVisible = value;
+    });
+  }
+
   late final _$hasErrorEmailAtom =
       Atom(name: '_UserInformationStoreBase.hasErrorEmail', context: context);
 
@@ -181,6 +197,17 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
   }
 
   @override
+  void setPasswordVisible(bool value) {
+    final _$actionInfo = _$_UserInformationStoreBaseActionController
+        .startAction(name: '_UserInformationStoreBase.setPasswordVisible');
+    try {
+      return super.setPasswordVisible(value);
+    } finally {
+      _$_UserInformationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setHasErrorEmail(bool value) {
     final _$actionInfo = _$_UserInformationStoreBaseActionController
         .startAction(name: '_UserInformationStoreBase.setHasErrorEmail');
@@ -211,6 +238,7 @@ errorMessage: ${errorMessage},
 textEditingController: ${textEditingController},
 errorFirebase: ${errorFirebase},
 messageFirebaseError: ${messageFirebaseError},
+passwordVisible: ${passwordVisible},
 hasErrorEmail: ${hasErrorEmail}
     ''';
   }

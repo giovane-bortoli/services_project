@@ -9,6 +9,8 @@ import 'package:services_project/shared/Widgets/custom_text_form_field.dart';
 import 'package:services_project/shared/Widgets/snack_bar.dart';
 import 'package:services_project/shared/Widgets/status_bar_widget.dart';
 import 'package:services_project/shared/client/custom_errors/handle_error.dart';
+import 'package:services_project/shared/theme/font_theme.dart';
+import 'package:services_project/shared/utils/app_colors.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -24,6 +26,7 @@ class _LoginViewState extends State<LoginView> {
   @override
   void initState() {
     flushBarErroFirebase();
+    userStore.passwordVisible == false;
     super.initState();
   }
 
@@ -52,25 +55,38 @@ class _LoginViewState extends State<LoginView> {
   Widget content(context) {
     return IntrinsicHeight(
       child: Observer(builder: (context) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const StatusBarWidget(),
-            loginField(),
-            passWordField(),
-            loginButton(),
-          ],
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const StatusBarWidget(),
+              _currencyTitle(),
+              _loginField(),
+              _passWordField(),
+              _loginButton(),
+            ],
+          ),
         );
       }),
     );
   }
 
-  Widget loginField() {
+  Widget _currencyTitle() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 100),
+      child: Text(
+        'Currency App',
+        style: CustomTextTheme.textTheme.headline4,
+      ),
+    );
+  }
+
+  Widget _loginField() {
     final userStore = Provider.of<UserInformationStore>(context, listen: false);
     return Padding(
-      padding: const EdgeInsets.only(top: 150),
+      padding: const EdgeInsets.only(top: 50, left: 20, right: 20),
       child: CustomTextFormField(
         onChanged: (value) {
           userStore.setEmail(value);
@@ -80,12 +96,27 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget passWordField() {
+  Widget _passWordField() {
     final userStore = Provider.of<UserInformationStore>(context, listen: false);
 
     return Padding(
-      padding: const EdgeInsets.only(top: 30),
+      padding: const EdgeInsets.only(top: 30, left: 20, right: 20),
       child: CustomTextFormField(
+        obscureText: !userStore.passwordVisible,
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+            onPressed: () {
+              if (userStore.passwordVisible == false) {
+                userStore.setPasswordVisible(true);
+              } else {
+                userStore.setPasswordVisible(false);
+              }
+            },
+            icon: Icon(userStore.passwordVisible
+                ? Icons.visibility
+                : Icons.visibility_off),
+          ),
+        ),
         onChanged: (value) {
           userStore.setPassword(value);
         },
@@ -94,30 +125,25 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 
-  Widget loginButton() {
+  Widget _loginButton() {
     final userStore = Provider.of<UserInformationStore>(context, listen: false);
 
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: ElevatedButton(
           onPressed: () async {
-            userStore.validateFields();
-            if (!userStore.hasErrorEmail == false) {
-              CustomSnackBar.errorSnackBar(context,
-                  message: 'E-mail ou senha inválidos!');
-            } else {
-              try {
-                userStore
-                    .loginUser(
-                        email: userStore.email, password: userStore.password)
-                    .then((value) {
-                  return !userStore.errorFirebase
-                      ? Navigator.popAndPushNamed(context, '/home')
-                      : null;
-                });
-              } catch (e) {
-                userStore.errorMessage.toString();
-              }
+            try {
+              userStore
+                  .loginUser(
+                      email: userStore.email, password: userStore.password)
+                  .then((value) {
+                return !userStore.errorFirebase
+                    ? Navigator.popAndPushNamed(context, '/currency')
+                    : null;
+              });
+            } catch (e) {
+              log('TESTE ERRO MSG');
+              await HandleError.getErrorMessageView(e, context);
             }
           },
           child: const Text('Login')),
