@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class UsdBrlModel {
-  final String code;
+  final String? code;
   final String? codein;
   final String? name;
-  final String high;
+  final String? high;
   final String? low;
   final String? varBid;
   final String? pctChange;
@@ -27,7 +27,7 @@ class UsdBrlModel {
 
   factory UsdBrlModel.fromJson(Map<String, dynamic> json) {
     return UsdBrlModel(
-      code: json['code'],
+      code: json['code'] ?? 'testee',
       codein: json['codein'],
       name: json['name'],
       high: json['high'],
@@ -37,7 +37,7 @@ class UsdBrlModel {
       bid: json['bid'],
       ask: json['ask'],
       timestamp: json['timestamp'],
-      createDate: json['createDate'],
+      createDate: json['create_date'],
     );
   }
   Map<String, dynamic> toJson() {
@@ -52,7 +52,7 @@ class UsdBrlModel {
     data['bid'] = bid;
     data['ask'] = ask;
     data['timestamp'] = timestamp;
-    data['createDate'] = createDate;
+    data['create_date'] = createDate;
     return data;
   }
 }

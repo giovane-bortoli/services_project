@@ -13,8 +13,10 @@ class UserAuth {
       final result = await auth.signInWithEmailAndPassword(
           email: email, password: password);
       inspect(result);
-    } on FirebaseAuthException catch (e) {
-      throw e;
+    } on FirebaseAuthException {
+      throw FirebaseAuthException;
+    } on Exception catch (e) {
+      log(e.toString());
     }
   }
 }

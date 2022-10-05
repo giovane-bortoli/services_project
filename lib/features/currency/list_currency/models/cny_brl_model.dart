@@ -37,7 +37,7 @@ class CnyBrlModel {
       bid: json['bid'],
       ask: json['ask'],
       timestamp: json['timestamp'],
-      createDate: json['createDate'],
+      createDate: json['create_date'],
     );
   }
   Map<String, dynamic> toJson() {

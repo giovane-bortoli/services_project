@@ -9,22 +9,6 @@ part of 'currency_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CurrencyStore on _CurrencyStoreBase, Store {
-  late final _$dolarAtom =
-      Atom(name: '_CurrencyStoreBase.dolar', context: context);
-
-  @override
-  double get dolar {
-    _$dolarAtom.reportRead();
-    return super.dolar;
-  }
-
-  @override
-  set dolar(double value) {
-    _$dolarAtom.reportWrite(value, super.dolar, () {
-      super.dolar = value;
-    });
-  }
-
   late final _$dolarControllerAtom =
       Atom(name: '_CurrencyStoreBase.dolarController', context: context);
 
@@ -90,26 +74,88 @@ mixin _$CurrencyStore on _CurrencyStoreBase, Store {
     });
   }
 
+  late final _$isLoadingAtom =
+      Atom(name: '_CurrencyStoreBase.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
+  late final _$isErrorAtom =
+      Atom(name: '_CurrencyStoreBase.isError', context: context);
+
+  @override
+  bool get isError {
+    _$isErrorAtom.reportRead();
+    return super.isError;
+  }
+
+  @override
+  set isError(bool value) {
+    _$isErrorAtom.reportWrite(value, super.isError, () {
+      super.isError = value;
+    });
+  }
+
+  late final _$getCurrencyApiAsyncAction =
+      AsyncAction('_CurrencyStoreBase.getCurrencyApi', context: context);
+
+  @override
+  Future<void> getCurrencyApi() {
+    return _$getCurrencyApiAsyncAction.run(() => super.getCurrencyApi());
+  }
+
   late final _$_CurrencyStoreBaseActionController =
       ActionController(name: '_CurrencyStoreBase', context: context);
 
   @override
-  void realChanged(String text) {
+  void setIsLoading(bool value) {
     final _$actionInfo = _$_CurrencyStoreBaseActionController.startAction(
-        name: '_CurrencyStoreBase.realChanged');
+        name: '_CurrencyStoreBase.setIsLoading');
     try {
-      return super.realChanged(text);
+      return super.setIsLoading(value);
     } finally {
       _$_CurrencyStoreBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void dolarChanged(String text) {
+  void setIsError(bool value) {
     final _$actionInfo = _$_CurrencyStoreBaseActionController.startAction(
-        name: '_CurrencyStoreBase.dolarChanged');
+        name: '_CurrencyStoreBase.setIsError');
     try {
-      return super.dolarChanged(text);
+      return super.setIsError(value);
+    } finally {
+      _$_CurrencyStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void initialStateLoading() {
+    final _$actionInfo = _$_CurrencyStoreBaseActionController.startAction(
+        name: '_CurrencyStoreBase.initialStateLoading');
+    try {
+      return super.initialStateLoading();
+    } finally {
+      _$_CurrencyStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void endStateLoading() {
+    final _$actionInfo = _$_CurrencyStoreBaseActionController.startAction(
+        name: '_CurrencyStoreBase.endStateLoading');
+    try {
+      return super.endStateLoading();
     } finally {
       _$_CurrencyStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -118,11 +164,12 @@ mixin _$CurrencyStore on _CurrencyStoreBase, Store {
   @override
   String toString() {
     return '''
-dolar: ${dolar},
 dolarController: ${dolarController},
 euroController: ${euroController},
 currentAmoutController: ${currentAmoutController},
-currencyList: ${currencyList}
+currencyList: ${currencyList},
+isLoading: ${isLoading},
+isError: ${isError}
     ''';
   }
 }

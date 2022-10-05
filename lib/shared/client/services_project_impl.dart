@@ -11,8 +11,8 @@ class ServicesProjectsImpl extends ServicesClient {
     final response = await client.get(path,
         queryParameters: query,
         options: dio.Options(
-            sendTimeout: 1000,
-            receiveTimeout: 1000,
+            sendTimeout: 5000,
+            receiveTimeout: 5000,
             headers: headers,
             validateStatus: (status) =>
                 status != null && (status >= 200 && status <= 499)));

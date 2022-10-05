@@ -10,7 +10,7 @@ class AppRoutes {
       '/splash': (context) => const SplashScreen(),
       '/login': (context) => const LoginView(),
       '/home': (context) => const MyHomePage(),
-      '/currency': (context) => const ListCurrencyView(),
+      ListCurrencyView.routeName: (context) => const ListCurrencyView(),
     };
   }
 }

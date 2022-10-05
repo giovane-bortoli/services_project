@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:services_project/features/currency/list_currency/controller/currency_store.dart';
+import 'package:services_project/features/currency/list_currency/models/currency_model.dart';
 import 'package:services_project/main.dart';
+import 'package:services_project/shared/client/services_project_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppDependencies {
@@ -10,5 +13,14 @@ class AppDependencies {
 
     //Firebase
     getIt.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
+
+    //CurrencyStore
+    getIt.registerSingleton<CurrencyStore>(CurrencyStore());
+
+    //CurrencyModel
+    getIt.registerSingleton<CurrencyModel>(CurrencyModel());
+
+    //service getApi
+    getIt.registerSingleton<ServicesProjectsImpl>(ServicesProjectsImpl());
   }
 }

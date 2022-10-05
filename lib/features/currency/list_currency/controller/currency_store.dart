@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 import 'package:services_project/features/currency/list_currency/models/currency_model.dart';
@@ -10,31 +12,50 @@ abstract class _CurrencyStoreBase with Store {
   final currencyDetails = GetCurrency();
 
   @observable
-  double dolar = 5.17;
-  double euro = 5.08;
-
-  @observable
   TextEditingController dolarController = TextEditingController();
   @observable
   TextEditingController euroController = TextEditingController();
   @observable
   TextEditingController currentAmoutController = TextEditingController();
 
-  @action
-  void realChanged(String text) {
-    double real = double.parse(text);
-    dolarController.text = (real / dolar).toStringAsFixed(2);
-  }
-
-  @action
-  void dolarChanged(String text) {
-    double real = double.parse(text);
-    dolarController.text = (dolar * dolar).toStringAsFixed(2);
-  }
-
   @observable
   var currencyList = ObservableList<CurrencyModel>.of([]);
 
-  // @action
-  // void addCurrency(String value) => currencyList.add(CurrencyModel(usdBrlModel: ));
+  //State Loading
+  @observable
+  bool isLoading = false;
+  @action
+  void setIsLoading(bool value) => isLoading = value;
+
+//State Error
+  @observable
+  bool isError = false;
+  @action
+  void setIsError(bool value) => isError = value;
+
+  //States get events
+  @action
+  void initialStateLoading() {
+    setIsError(false);
+    setIsLoading(true);
+  }
+
+  @action
+  void endStateLoading() {
+    setIsLoading(false);
+    setIsError(false);
+  }
+
+  @action
+  Future<void> getCurrencyApi() async {
+    try {
+      initialStateLoading();
+      await currencyDetails.getCurrency();
+      inspect(currencyDetails.getCurrency());
+      endStateLoading();
+    } catch (e) {
+      setIsLoading(false);
+      setIsError(true);
+    }
+  }
 }

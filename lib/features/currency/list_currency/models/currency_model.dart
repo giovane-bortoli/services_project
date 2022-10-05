@@ -24,7 +24,6 @@ class CurrencyModel {
     this.cadBrl,
     this.audBrl,
   });
-
   factory CurrencyModel.fromJson(Map<String, dynamic> json) {
     return CurrencyModel(
       usdBrl:

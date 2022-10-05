@@ -37,7 +37,7 @@ class EurBrlModel {
       bid: json['bid'],
       ask: json['ask'],
       timestamp: json['timestamp'],
-      createDate: json['createDate'],
+      createDate: json['create_date'],
     );
   }
   Map<String, dynamic> toJson() {
@@ -52,7 +52,7 @@ class EurBrlModel {
     data['bid'] = bid;
     data['ask'] = ask;
     data['timestamp'] = timestamp;
-    data['createDate'] = createDate;
+    data['create_date'] = createDate;
     return data;
   }
 }

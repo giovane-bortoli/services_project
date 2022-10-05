@@ -1,10 +1,12 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:services_project/features/auth/controller/user_information_store.dart';
+import 'package:services_project/features/auth/services/user/user_auth.dart';
 import 'package:services_project/shared/Widgets/custom_text_form_field.dart';
 import 'package:services_project/shared/Widgets/snack_bar.dart';
 import 'package:services_project/shared/Widgets/status_bar_widget.dart';
@@ -30,12 +32,6 @@ class _LoginViewState extends State<LoginView> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    reactionErrorFirebase();
-    super.dispose();
-  }
-
   void flushBarErroFirebase() {
     reactionErrorFirebase = reaction((_) => userStore.errorFirebase, (_) {
       userStore.errorFirebase
@@ -43,6 +39,12 @@ class _LoginViewState extends State<LoginView> {
               message: userStore.messageFirebaseError ?? '')
           : null;
     });
+  }
+
+  @override
+  void dispose() {
+    reactionErrorFirebase();
+    super.dispose();
   }
 
   @override
@@ -131,22 +133,19 @@ class _LoginViewState extends State<LoginView> {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
       child: ElevatedButton(
-          onPressed: () async {
-            try {
-              userStore
-                  .loginUser(
-                      email: userStore.email, password: userStore.password)
-                  .then((value) {
-                return !userStore.errorFirebase
-                    ? Navigator.popAndPushNamed(context, '/currency')
-                    : null;
-              });
-            } catch (e) {
-              log('TESTE ERRO MSG');
-              await HandleError.getErrorMessageView(e, context);
-            }
-          },
-          child: const Text('Login')),
+        child: const Text('Login'),
+        onPressed: () async {
+          userStore
+              .loginUser(email: userStore.email, password: userStore.password)
+              .then(
+            (value) {
+              return !userStore.errorFirebase
+                  ? Navigator.popAndPushNamed(context, '/listCurrencyView')
+                  : null;
+            },
+          );
+        },
+      ),
     );
   }
 }
