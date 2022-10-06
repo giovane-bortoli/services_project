@@ -9,13 +9,13 @@ class SaveFavoriteCurrency = _SaveFavoriteCurrencyBase
     with _$SaveFavoriteCurrency;
 
 abstract class _SaveFavoriteCurrencyBase with Store {
-  Future<void> saveFavoriteCurrency({required CurrencyModel currency}) async {
+  Future<void> saveFavoriteCurrency({required USDBRL currency}) async {
     try {
       final instance = await SharedPreferences.getInstance();
       List<String> currencyList = [];
 
       if (instance.containsKey('currency')) {
-        currencyList = instance.getString('currency')! as List<String>;
+        currencyList = instance.getStringList('currency')!;
         currencyList.add(jsonEncode(currency.toJson()));
         instance.setStringList('currency', currencyList);
       } else {

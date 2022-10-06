@@ -51,6 +51,7 @@ dependencies:
   #Usefull tools
   get_it: ^7.2.0
   flutter_dotenv: ^5.0.2
+  progress_indicators: ^1.0.0
 
 
 dev_dependencies:

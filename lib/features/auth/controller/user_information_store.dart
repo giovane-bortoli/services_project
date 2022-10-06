@@ -13,6 +13,12 @@ class UserInformationStore = _UserInformationStoreBase
 abstract class _UserInformationStoreBase with Store {
   final clientAuth = UserAuth();
 
+  //State loading
+  @observable
+  bool isLoading = false;
+  @action
+  void setIsLoading(bool value) => isLoading = value;
+
 //User Data
   @observable
   String email = '';
@@ -49,23 +55,17 @@ abstract class _UserInformationStoreBase with Store {
   void setPasswordVisible(bool value) => passwordVisible = value;
 
   @action
-  Future<void> loginUser(
-      {required String email, required String password}) async {
+  Future<UserCredential> loginUser({
+    required String email,
+    required String password,
+  }) async {
     try {
-      setErrorFirebase(false);
-      setMessageFirebaseError('');
-      await clientAuth.signIn(email, password);
+      return await clientAuth.signIn(
+        email: email,
+        password: password,
+      );
     } on FirebaseAuthException catch (e) {
-      setErrorFirebase(true);
-      if (e.code == 'user-not-found') {
-        setMessageFirebaseError('Usuário não encontrado');
-      } else if (e.code == 'wrong-password') {
-        setMessageFirebaseError('Senha inválida!');
-      } else if (e.code == 'invalid-email') {
-        setMessageFirebaseError('Email inválido');
-      } else {
-        setMessageFirebaseError('Ocorreu um erro, tente novamente!');
-      }
+      throw e;
     }
   }
 

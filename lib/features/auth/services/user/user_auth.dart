@@ -8,19 +8,23 @@ import 'package:services_project/shared/client/custom_errors/handle_error.dart';
 class UserAuth {
   final auth = getIt<FirebaseAuth>();
 
-  Future<void> signIn(String email, String password) async {
+  Future<UserCredential> signIn({
+    required String email,
+    required String password,
+  }) async {
     try {
-      final result = await auth.signInWithEmailAndPassword(
+      return await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      inspect(result);
-    } on FirebaseAuthException {
-      throw FirebaseAuthException;
-    } on Exception catch (e) {
-      log(e.toString());
+    } on FirebaseAuthException catch (e) {
+      throw e;
     }
   }
 
   Future<void> signOut() async {
-    auth.signOut();
+    try {
+      await auth.signOut();
+    } on FirebaseAuthException catch (e) {
+      throw e;
+    }
   }
 }

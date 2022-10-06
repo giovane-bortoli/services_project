@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:ffi';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -10,6 +11,7 @@ import 'package:services_project/features/auth/services/user/user_auth.dart';
 import 'package:services_project/features/kebab_menu/controller/currency_list_store.dart';
 import 'package:services_project/main.dart';
 import 'package:services_project/shared/Widgets/custom_text_form_field.dart';
+import 'package:services_project/shared/Widgets/loading_widget.dart';
 import 'package:services_project/shared/Widgets/snack_bar.dart';
 import 'package:services_project/shared/Widgets/status_bar_widget.dart';
 import 'package:services_project/shared/client/custom_errors/handle_error.dart';
@@ -133,22 +135,31 @@ class _LoginViewState extends State<LoginView> {
   Widget _loginButton() {
     final userStore = Provider.of<UserInformationStore>(context, listen: false);
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: ElevatedButton(
-        child: const Text('Login'),
-        onPressed: () async {
-          currencyListStore.loadCurrencyList();
-          userStore
-              .loginUser(email: userStore.email, password: userStore.password)
-              .then(
-            (value) {
-              return !userStore.errorFirebase
-                  ? Navigator.popAndPushNamed(context, '/favoriteCurrencyView')
-                  : null;
-            },
-          );
-        },
+    return Container(
+      width: 150,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
+        child: ElevatedButton(
+          child: userStore.isLoading == true
+              ? LoadingOverlay.loading
+              : const Text('Login'),
+          onPressed: () async {
+            userStore.setIsLoading(true);
+            try {
+              currencyListStore.loadCurrencyList();
+              final result = await userStore.loginUser(
+                email: userStore.email,
+                password: userStore.password,
+              );
+              if (result.runtimeType == UserCredential) {
+                Navigator.popAndPushNamed(context, '/favoriteCurrencyView');
+              }
+            } catch (e) {
+              await HandleError.getErrorMessageView(e, context);
+            }
+            userStore.setIsLoading(false);
+          },
+        ),
       ),
     );
   }

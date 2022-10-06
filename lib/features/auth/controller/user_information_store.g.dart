@@ -9,6 +9,22 @@ part of 'user_information_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$UserInformationStore on _UserInformationStoreBase, Store {
+  late final _$isLoadingAtom =
+      Atom(name: '_UserInformationStoreBase.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   late final _$emailAtom =
       Atom(name: '_UserInformationStoreBase.email', context: context);
 
@@ -144,7 +160,8 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
       AsyncAction('_UserInformationStoreBase.loginUser', context: context);
 
   @override
-  Future<void> loginUser({required String email, required String password}) {
+  Future<UserCredential> loginUser(
+      {required String email, required String password}) {
     return _$loginUserAsyncAction
         .run(() => super.loginUser(email: email, password: password));
   }
@@ -159,6 +176,17 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
 
   late final _$_UserInformationStoreBaseActionController =
       ActionController(name: '_UserInformationStoreBase', context: context);
+
+  @override
+  void setIsLoading(bool value) {
+    final _$actionInfo = _$_UserInformationStoreBaseActionController
+        .startAction(name: '_UserInformationStoreBase.setIsLoading');
+    try {
+      return super.setIsLoading(value);
+    } finally {
+      _$_UserInformationStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setEmail(String value) {
@@ -240,6 +268,7 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
   @override
   String toString() {
     return '''
+isLoading: ${isLoading},
 email: ${email},
 password: ${password},
 errorMessage: ${errorMessage},

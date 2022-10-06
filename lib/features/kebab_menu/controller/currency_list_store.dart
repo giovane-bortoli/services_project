@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:mobx/mobx.dart';
 import 'package:services_project/features/currency/list_currency/models/currency_model.dart';
 import 'package:services_project/features/currency/list_currency/services/get_currency.dart';
 import 'package:services_project/features/currency/list_currency/services/save_currency.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 part 'currency_list_store.g.dart';
 
 class CurrencyListStore = _CurrencyListStoreBase with _$CurrencyListStore;
@@ -46,7 +48,7 @@ abstract class _CurrencyListStoreBase with Store {
   @action
   Future<void> initialLoad() async {
     final result = await currencyDetails.getCurrency();
-    // setCurrencyList(result);
+    inspect(result);
   }
 
   @action
@@ -63,15 +65,26 @@ abstract class _CurrencyListStoreBase with Store {
     inspect(currencyList);
   }
 
-  @action
-  Future<void> saveFavoriteCurrency({required CurrencyModel currency}) async {
-    initialStateLoading();
-    try {
-      final result = saveCurrency.saveFavoriteCurrency(currency: currency);
-      inspect(result);
-      endStateLoading();
-    } catch (_) {
-      setIsError(true);
-    }
+  //
+  void saveFavoriteCurrency() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final result = await currencyDetails.getCurrency();
+
+    String json = jsonEncode(currencyList);
+    prefs.setString('currency', json);
+
+    log(json);
   }
+
+  // @action
+  // Future<void> saveFavoriteCurrency({required USDBRL currency}) async {
+  //   initialStateLoading();
+  //   try {
+  //     final result = saveCurrency.saveFavoriteCurrency(currency: currency);
+  //     inspect(result);
+  //     endStateLoading();
+  //   } catch (_) {
+  //     setIsError(true);
+  //   }
+  // }
 }

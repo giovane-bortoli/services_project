@@ -73,16 +73,6 @@ mixin _$CurrencyListStore on _CurrencyListStoreBase, Store {
     return _$loadCurrencyListAsyncAction.run(() => super.loadCurrencyList());
   }
 
-  late final _$saveFavoriteCurrencyAsyncAction = AsyncAction(
-      '_CurrencyListStoreBase.saveFavoriteCurrency',
-      context: context);
-
-  @override
-  Future<void> saveFavoriteCurrency({required CurrencyModel currency}) {
-    return _$saveFavoriteCurrencyAsyncAction
-        .run(() => super.saveFavoriteCurrency(currency: currency));
-  }
-
   late final _$_CurrencyListStoreBaseActionController =
       ActionController(name: '_CurrencyListStoreBase', context: context);
 
