@@ -69,6 +69,11 @@ abstract class _UserInformationStoreBase with Store {
     }
   }
 
+  @action
+  Future<void> logOut() async {
+    await clientAuth.signOut();
+  }
+
   @observable
   bool hasErrorEmail = false;
   @action

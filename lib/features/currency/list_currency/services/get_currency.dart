@@ -11,7 +11,7 @@ class GetCurrency {
     final client = getIt<ServicesProjectsImpl>();
     final response = await client.get('${AppConfigs.baseUrl}');
     if (response.statusCode == 200) {
-      inspect(response);
+      //inspect(response);
       return CurrencyModel.fromJson(response.data);
     } else {
       throw Exception();

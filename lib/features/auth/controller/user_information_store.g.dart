@@ -149,6 +149,14 @@ mixin _$UserInformationStore on _UserInformationStoreBase, Store {
         .run(() => super.loginUser(email: email, password: password));
   }
 
+  late final _$logOutAsyncAction =
+      AsyncAction('_UserInformationStoreBase.logOut', context: context);
+
+  @override
+  Future<void> logOut() {
+    return _$logOutAsyncAction.run(() => super.logOut());
+  }
+
   late final _$_UserInformationStoreBaseActionController =
       ActionController(name: '_UserInformationStoreBase', context: context);
 

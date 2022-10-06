@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:services_project/features/auth/views/login_view.dart';
-import 'package:services_project/features/currency/list_currency/views/list_currency_view.dart';
+import 'package:services_project/features/currency/list_currency/views/favorite_currency_view.dart';
+import 'package:services_project/features/kebab_menu/views/currency_list_view.dart';
 import 'package:services_project/features/splash/splash_screen.dart';
 import 'package:services_project/views/home.dart';
 
@@ -10,7 +11,8 @@ class AppRoutes {
       '/splash': (context) => const SplashScreen(),
       '/login': (context) => const LoginView(),
       '/home': (context) => const MyHomePage(),
-      ListCurrencyView.routeName: (context) => const ListCurrencyView(),
+      '/listCurrencyView': (context) => const CurrencyListView(),
+      FavoriteCurrencyView.routeName: (context) => const FavoriteCurrencyView(),
     };
   }
 }

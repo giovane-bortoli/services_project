@@ -19,4 +19,8 @@ class UserAuth {
       log(e.toString());
     }
   }
+
+  Future<void> signOut() async {
+    auth.signOut();
+  }
 }

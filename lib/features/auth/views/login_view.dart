@@ -7,6 +7,8 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:services_project/features/auth/controller/user_information_store.dart';
 import 'package:services_project/features/auth/services/user/user_auth.dart';
+import 'package:services_project/features/kebab_menu/controller/currency_list_store.dart';
+import 'package:services_project/main.dart';
 import 'package:services_project/shared/Widgets/custom_text_form_field.dart';
 import 'package:services_project/shared/Widgets/snack_bar.dart';
 import 'package:services_project/shared/Widgets/status_bar_widget.dart';
@@ -22,6 +24,7 @@ class LoginView extends StatefulWidget {
 }
 
 UserInformationStore userStore = UserInformationStore();
+final currencyListStore = getIt<CurrencyListStore>();
 
 class _LoginViewState extends State<LoginView> {
   late final ReactionDisposer reactionErrorFirebase;
@@ -135,12 +138,13 @@ class _LoginViewState extends State<LoginView> {
       child: ElevatedButton(
         child: const Text('Login'),
         onPressed: () async {
+          currencyListStore.loadCurrencyList();
           userStore
               .loginUser(email: userStore.email, password: userStore.password)
               .then(
             (value) {
               return !userStore.errorFirebase
-                  ? Navigator.popAndPushNamed(context, '/listCurrencyView')
+                  ? Navigator.popAndPushNamed(context, '/favoriteCurrencyView')
                   : null;
             },
           );

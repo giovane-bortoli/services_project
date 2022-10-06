@@ -51,7 +51,7 @@ abstract class _CurrencyStoreBase with Store {
     try {
       initialStateLoading();
       await currencyDetails.getCurrency();
-      inspect(currencyDetails.getCurrency());
+      inspect(await currencyDetails.getCurrency());
       endStateLoading();
     } catch (e) {
       setIsLoading(false);
